@@ -44,7 +44,8 @@ services:
       - --certificatesResolvers.dns-cloudflare.acme.dnsChallenge.provider=cloudflare
       - --certificatesResolvers.dns-cloudflare.acme.dnsChallenge.resolvers=1.1.1.1:53,1.0.0.1:53
     networks:
-      traefik: 10.1.11.254 # Static traefik IP
+      traefik: 
+        ipv4_address: 10.1.11.254 # Static traefik IP
     security_opt:
       - no-new-privileges:true
     ports:
