@@ -4,7 +4,8 @@ networks:
   traefik:
     external:
       name: traefik
-  default: bridge
+  default:
+    driver: bridge
 
 services:
   traefik:
