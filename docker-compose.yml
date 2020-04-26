@@ -62,7 +62,7 @@ services:
         mode: host
     volumes:
       - $USERDIR/docker/traefik/rules:/rules
-      - /var/run/docker.sock:/var/run/docker.sock:resolvers
+      - /var/run/docker.sock:/var/run/docker.sock:ro
       - $USERDIR/docker/traefik/acme/acme.json:/acme.json
       - $USERDIR/docker/traefik/traefik.log:/traefik.log
       - $USERDIR/docker/shared:/shared
