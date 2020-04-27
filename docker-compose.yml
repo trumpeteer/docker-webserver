@@ -92,7 +92,7 @@ services:
       ## Middlewares
       - "traefik.http.routers.traefik-rtr.middlewares=chain-oauth@file"
 
-# Google OAuth - Single Sign On using OAuth 2.0
+  # Google OAuth - Single Sign On using OAuth 2.0
   oauth:
     container_name: oauth
     image: thomseddon/traefik-forward-auth:latest
@@ -125,3 +125,64 @@ services:
       - "traefik.http.services.oauth-svc.loadbalancer.server.port=4181"
       ## Middlewares
       - "traefik.http.routers.oauth-rtr.middlewares=chain-oauth@file"
+
+  # Portainer - WebUI for Containers
+  portainer:
+    container_name: portainer
+    image: portainer/portainer:latest
+    restart: unless-stopped
+    command: -H unix:///var/run/docker.sock
+    networks:
+      traefik:
+        ipv4_address: 10.1.11.252
+    security_opt:
+      - no-new-privileges:true
+      # ports:
+      # - "$PORTAINER_PORT:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - $USERDIR/docker/portainer/data:/data 
+    environment:
+      - TZ=$TZ
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.portainer-rtr.entrypoints=https"
+      - "traefik.http.routers.portainer-rtr.rule=Host(`portainer.$DOMAINNAME`)"
+      - "traefik.http.routers.portainer-rtr.tls=true"
+      ## Middlewares
+        # - "traefik.http.routers.portainer-rtr.middlewares=chain-no-auth@file" # No Authentication
+        # - "traefik.http.routers.portainer-rtr.middlewares=chain-basic-auth@file" # Basic Authentication
+      - "traefik.http.routers.portainer-rtr.middlewares=chain-oauth@file" # Google OAuth 2.0
+      ## HTTP Services
+      - "traefik.http.routers.portainer-rtr.service=portainer-svc"
+      - "traefik.http.services.portainer-svc.loadbalancer.server.port=9000"
+
+  # AdGuard Home - DNS Server with Ad Blocking
+  adguard:
+    container_name: adguard
+    image: adguard/adguardhome:latest
+    restart: unless-stopped
+    networks:
+      traefik:
+        ipv4_address: 10.1.11.1
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - $USERDIR/adguard/work:/opt/adguardhome/work
+      - $USERDIR/adguard/conf:/opt/adguardhome/conf
+    environment:
+      - TZ=$TZ
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.adguard-rtr.entrypoints=https"
+      - "traefik.http.routers.adguard-rtr.rule=Host(`adguard.$DOMAINNAME`)"
+      - "traefik.http.routers.adguard-rtr.tls=true"
+      ## Middlewares
+        # - "traefik.http.routers.adguard-rtr.middlewares=chain-no-auth@file" # No Authentication
+        # - "traefik.http.routers.adguard-rtr.middlewares=chain-basic-auth@file" # Basic Authentication
+      - "traefik.http.routers.adguard-rtr.middlewares=chain-oauth@file" # Google OAuth 2.0
+      ## HTTP Services
+      - "traefik.http.routers.adguard-rtr.service=adguard-svc"
+      - "traefik.http.services.adguard-svc.loadbalancer.server.port=3000"
