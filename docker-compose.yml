@@ -254,8 +254,8 @@ services:
       # volumes:
       # - $USERDIR/docker/phpmyadmin:/etc/phpmyadmin
     environment:
-        # - PMA_HOST=$DB_HOST
-      - PMA_PORT=$DB_PORT
+      - PMA_HOST=$MYSQL_HOST
+      - PMA_PORT=$MYSQL_PORT
       - PMA_ARBITRARY=1
       - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
     labels:
@@ -284,7 +284,7 @@ services:
     volumes:
       - $USERDIR/docker/postgres:/var/lib/postgresql/data
     environment:
-      POSTGRES_PASSWORD: $PGSQL_ROOT_PASS
+      POSTGRES_PASSWORD: $PGSQL_ROOT_PASSWORD
 
   # pgAdmin - Postgres Database management
   phpmyadmin:
