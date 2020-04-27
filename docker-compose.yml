@@ -21,6 +21,7 @@ services:
       - --entryPoints.https.forwardedHeaders.trustedIPs=173.245.48.0/20,103.21.244.0/22,103.22.200.0/22,103.31.4.0/22,141.101.64.0/18,108.162.192.0/18,190.93.240.0/20,188.114.96.0/20,197.234.240.0/22,198.41.128.0/17,162.158.0.0/15,104.16.0.0/12,172.64.0.0/13,131.0.72.0/22
       - --entryPoints.traefik.address=:8080
       - --api=true
+      - --api.dashboard=true
       # - --api.insecure=true
       # - --servers.Transport.insecureSkipVerify=true
       - --log=true
@@ -38,7 +39,7 @@ services:
       - --providers.file.directory=/rules
       # - --providers.file.filename=/path/to/file # Load dynamic configuration from a file
       - --providers.file.watch=true # Only works on top level files in the rules folder
-      - --certificatesResolvers.dns-cloudflare.acme.caServer=https://acme-staging-v02.api.letsencrypt.org/directory # LetsEncrypt Staging Server - uncomment when testing
+      # - --certificatesResolvers.dns-cloudflare.acme.caServer=https://acme-staging-v02.api.letsencrypt.org/directory # LetsEncrypt Staging Server - uncomment when testing
       - --certificatesResolvers.dns-cloudflare.acme.email=$CLOUDFLARE_EMAIL
       - --certificatesResolvers.dns-cloudflare.acme.storage=/acme.json
       - --certificatesResolvers.dns-cloudflare.acme.dnsChallenge.provider=cloudflare
@@ -49,7 +50,7 @@ services:
     security_opt:
       - no-new-privileges:true
     ports:
-      - "target: 80
+      - target: 80
         published: 80
         protocol: tcp
         mode: host
@@ -59,7 +60,7 @@ services:
       - target: 8080
         published: 8080
         protocol: tcp
-        mode: host"
+        mode: host
     volumes:
       - $USERDIR/docker/traefik/rules:/rules
       - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -87,5 +88,6 @@ services:
       # - "traefik.http.routers.traefik-rtr.tls.domains[1].sans=*.$SECONDDOMAINNAME" # Pulls wildcard cert for second domain
       ## Services - API
       - "traefik.http.routers.traefik-rtr.service=api@internal"
+      - "traefik.http.services.traefik-rtr.loadbalancer.server.port=8080"
       ## Middlewares
       - "traefik.http.routers.traefik-rtr.middlewares=middlewares-basic-auth@file"
