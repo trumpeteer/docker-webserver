@@ -290,7 +290,7 @@ services:
     command:
       --user=$PUID:$PGID
     environment:
-      - POSTGRES_PASSWORD: $PGSQL_ROOT_PASSWORD
+      - POSTGRES_PASSWORD=$PGSQL_ROOT_PASSWORD
 
   # pgAdmin - Postgres Database management
   pgadmin:
