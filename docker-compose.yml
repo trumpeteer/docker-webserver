@@ -304,7 +304,7 @@ services:
       # ports:
         # - "$pgadmin_PORT:80"
     volumes:
-      - $USERDIR/docker/postgres/pgadmin:/pgadmin
+      - $USERDIR/docker/pgadmin:/pgadmin
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
