@@ -315,7 +315,7 @@ services:
       - "traefik.enable=true"
       ## HTTP Routers
       - "traefik.http.routers.pgadmin-rtr.entrypoints=https"
-      - "traefik.http.routers.pgadmin-rtr.rule=Host(`pma.$DOMAINNAME`)"
+      - "traefik.http.routers.pgadmin-rtr.rule=Host(`pgadmin.$DOMAINNAME`)"
       - "traefik.http.routers.pgadmin-rtr.tls=true"
       # - "traefik.http.routers.pgadmin-rtr.tls.certresolver=dns-cloudflare" 
       ## Middlewares
