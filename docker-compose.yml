@@ -398,7 +398,7 @@ services:
   # Bitwarden - Password Vault
   bitwarden:
     container_name: bitwarden
-    image: bitwardenrs/server:latest
+    image: bitwardenrs/server-postgresql:latest
     restart: always
     networks:
       traefik:
