@@ -287,8 +287,7 @@ services:
       - no-new-privileges:true
     volumes:
       - $USERDIR/docker/postgres:/var/lib/postgresql/data
-    command:
-      --user=$PUID:$PGID
+    user: $PUID:$PGID
     environment:
       - POSTGRES_PASSWORD=$PGSQL_ROOT_PASSWORD
 
